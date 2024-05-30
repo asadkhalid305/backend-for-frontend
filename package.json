@@ -3,9 +3,9 @@
   "scripts": {
     "build": "turbo run build",
     "clean": "turbo run clean",
-    "dev": "turbo run dev",
-    "dev:api": "turbo dev --filter api",
-    "dev:client": "turbo dev --filter client",
+    "dev": "dotenv -- turbo run dev",
+    "dev:api": "dotenv -- turbo dev --filter api",
+    "dev:client": "dotenv -- turbo dev --filter client",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo run lint",
     "test": "turbo run test",
@@ -18,5 +18,8 @@
   "packageManager": "pnpm@9.0.1",
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv-cli": "^7.4.2"
   }
 }
