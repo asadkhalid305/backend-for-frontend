@@ -12,7 +12,7 @@ const routes = (app: Application) => {
     return res.json({ status: "ok" });
   });
 
-  app.use(sportsmonkRoute);
+  app.use("/api", sportsmonkRoute);
 
   app.use((_req: Request, res: Response) => {
     res.status(404).send("Route not found!");

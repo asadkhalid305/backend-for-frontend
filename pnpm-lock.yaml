@@ -24,6 +24,9 @@ importers:
       '@repo/logger':
         specifier: workspace:*
         version: link:../../packages/logger
+      '@repo/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       axios:
         specifier: ^1.7.2
         version: 1.7.2
@@ -176,6 +179,12 @@ importers:
       tsup:
         specifier: ^8.0.2
         version: 8.0.2(postcss@8.4.35)(ts-node@10.9.2(@types/node@20.11.24)(typescript@5.3.3))(typescript@5.3.3)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
+  packages/types:
+    devDependencies:
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
