@@ -1,17 +1,8 @@
-import { log } from "@repo/logger";
-
-export const metadata = {
-  title: "Store | Kitchen Sink",
-};
-
-export default function Store(): JSX.Element {
-  log("Hey! This is the Store page.");
-
+export default function PlayerApp(): JSX.Element {
   return (
     <div className="container">
       <h1 className="title">
-        Store <br />
-        <span>Kitchen Sink</span>
+        <span>Player App</span>
       </h1>
     </div>
   );

@@ -1,4 +1,4 @@
-import { log } from "@repo/logger";
+import { logAPI } from "@repo/logger";
 import type {
   Country,
   Player,
@@ -9,37 +9,39 @@ import { Router } from "express";
 import type { Request, Response } from "express";
 import axios from "../../axios.ts";
 
+type PlayerWithouPosition = Omit<Player, "position">;
+
 const router: Router = Router();
 
 router.get("/countries", async (req: Request, res: Response) => {
   try {
-    log("countries are being fetched!");
+    logAPI("countries are being fetched!");
     const response = await axios.get(`/countries`);
     const countries: Country[] = response.data.data || [];
-    res.status(200).json(countries);
+    res.status(200).json({ countries });
   } catch (error) {
     res.status(500).json({ error: "Error fetching player data" });
   } finally {
-    log("countries are fetched");
+    logAPI("countries are fetched");
   }
 });
 
 router.get("/positions", async (req: Request, res: Response) => {
   try {
-    log("positions are being fetched!");
+    logAPI("positions are being fetched!");
     const response = await axios.get(`/positions`);
     const positions: PlayerPosition[] = response.data.data || [];
-    res.status(200).json(positions);
+    res.status(200).json({ positions });
   } catch (error) {
     res.status(500).json({ error: "Error fetching positions data" });
   } finally {
-    log("positions are fetched");
+    logAPI("positions are fetched");
   }
 });
 
-router.get("/players", async (req: Request, res: Response) => {
+router.post("/players", async (req: Request, res: Response) => {
   try {
-    log("players are being fetched!");
+    logAPI("players are being fetched!");
     const country_id = req.query.country_id;
 
     if (!country_id) {
@@ -54,18 +56,25 @@ router.get("/players", async (req: Request, res: Response) => {
         },
       },
     });
+
     const players: Player[] = response.data.data || [];
-    res.status(200).json(players);
+
+    //remove position from each player for sake of example
+    const playersWithoutPosition: PlayerWithouPosition[] = players.map(
+      ({ position, ...rest }) => rest
+    );
+
+    res.status(200).json({ player: playersWithoutPosition });
   } catch (error) {
     res.status(500).json({ error: "Error fetching players data" });
   } finally {
-    log("players are fetched");
+    logAPI("players are fetched");
   }
 });
 
 router.get("/players/:id", async (req: Request, res: Response) => {
   try {
-    log("player is being fetched!");
+    logAPI("player is being fetched!");
     const id = req.params.id;
 
     if (!id) {
@@ -75,17 +84,22 @@ router.get("/players/:id", async (req: Request, res: Response) => {
 
     const response = await axios.get(`/players/${id}`);
     const player: Player = response.data.data || [];
-    res.status(200).json(player);
+
+    //remove position from a player for sake of example
+    const { position, ...rest } = player;
+    const playerWithoutPosition: PlayerWithouPosition = rest;
+
+    res.status(200).json({ player: playerWithoutPosition });
   } catch (error) {
     res.status(500).json({ error: "Error fetching player data" });
   } finally {
-    log("player is fetched");
+    logAPI("player is fetched");
   }
 });
 
 router.get("/players/:id/position", async (req: Request, res: Response) => {
   try {
-    log("player position is being fetched!");
+    logAPI("player position is being fetched!");
     const id = req.params.id;
 
     if (!id) {
@@ -95,17 +109,17 @@ router.get("/players/:id/position", async (req: Request, res: Response) => {
 
     const response = await axios.get(`/positions/${id}`);
     const position: PlayerPosition = response.data.data || [];
-    res.status(200).json(position);
+    res.status(200).json({ position });
   } catch (error) {
     res.status(500).json({ error: "Error fetching player position data" });
   } finally {
-    log("player position is fetched");
+    logAPI("player position is fetched");
   }
 });
 
 router.get("/players/:id/career", async (req: Request, res: Response) => {
   try {
-    log("player career is being fetched!");
+    logAPI("player career is being fetched!");
     const id = req.params.id;
 
     if (!id) {
@@ -119,11 +133,11 @@ router.get("/players/:id/career", async (req: Request, res: Response) => {
       },
     });
     const career: PlayerCareer = response.data.data || [];
-    res.status(200).json(career);
+    res.status(200).json({ career });
   } catch (error) {
     res.status(500).json({ error: "Error fetching player career data" });
   } finally {
-    log("player career is fetched");
+    logAPI("player career is fetched");
   }
 });
 
