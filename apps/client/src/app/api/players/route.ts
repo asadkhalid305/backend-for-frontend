@@ -1,5 +1,6 @@
 import type { Player } from "@repo/types";
 import { type NextRequest, NextResponse } from "next/server";
+import axios from "axios";
 
 const BASE_URL = process.env.API_BASE_URL || "";
 
@@ -11,18 +12,24 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "Country ID is required" });
   }
 
-  const response = await fetch(`${BASE_URL}/players`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      filter: {
-        country_id: countryId,
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/api/players`,
+      {
+        filter: {
+          country_id: countryId,
+        },
       },
-    }),
-  });
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  const players = (await response.json()) as Player[];
-  return NextResponse.json({ players });
+    const players = response.data as Player[];
+    return NextResponse.json({ players });
+  } catch (error) {
+    return NextResponse.json({ error: "Error fetching players" });
+  }
 }

@@ -1,5 +1,6 @@
 import type { Player, PlayerPosition } from "@repo/types";
 import { type NextRequest, NextResponse } from "next/server";
+import axios from "axios";
 
 const BASE_URL = process.env.API_BASE_URL || "";
 
@@ -13,12 +14,21 @@ export async function GET(
     return NextResponse.json({ error: "Player ID is required" });
   }
 
-  let response = await fetch(`${BASE_URL}/players/${playerId}`);
-  let player = (await response.json()) as Player;
-  response = await fetch(`${BASE_URL}/players/${playerId}/position`);
-  const position = (await response.json()) as PlayerPosition;
+  try {
+    const playerResponse = await axios.get(
+      `${BASE_URL}/api/players/${playerId}`
+    );
+    let player = playerResponse.data as Player;
 
-  player = { ...player, position };
+    const positionResponse = await axios.get(
+      `${BASE_URL}/players/${playerId}/position`
+    );
+    const position = positionResponse.data as PlayerPosition;
 
-  return NextResponse.json({ player });
+    player = { ...player, position };
+
+    return NextResponse.json({ player });
+  } catch (error) {
+    return NextResponse.json({ error: "Error fetching player data" });
+  }
 }
