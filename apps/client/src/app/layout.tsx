@@ -1,6 +1,10 @@
-import "./styles.css";
+import "./globals.css";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 
-export const metadata = {
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
   title: "Player App",
 };
 
@@ -11,7 +15,7 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

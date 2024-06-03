@@ -4,23 +4,19 @@
   "globalEnv": ["PORT", "SPORTMONKS_API_TOKEN", "API_BASE_URL"],
   "pipeline": {
     "build": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
     },
     "test": {
       "outputs": ["coverage/**"],
       "dependsOn": []
     },
-    "lint": {
-      "dependsOn": ["^build"]
-    },
-    "typecheck": {
-      "dependsOn": ["^build"]
-    },
-    "dev": {
-      "dependsOn": ["^build"],
-      "cache": false,
-      "persistent": true
-    },
+    "lint": {},
+    "type-check": {},
     "clean": {
       "cache": false
     }
