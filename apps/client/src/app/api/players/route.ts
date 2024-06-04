@@ -4,7 +4,7 @@ import axios from "axios";
 
 const BASE_URL = process.env.API_BASE_URL || "";
 
-export async function POST(request: NextRequest): Promise<NextResponse> {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   const searchParams = request.nextUrl.searchParams;
   const countryId = searchParams.get("countryId");
 

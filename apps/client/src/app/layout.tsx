@@ -15,7 +15,11 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body
+        className={`${inter.className} antialiased scroll-smooth lg:subpixel-antialiased`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

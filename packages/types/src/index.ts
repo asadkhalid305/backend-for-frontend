@@ -28,6 +28,16 @@ interface PlayerPosition {
   name: string;
 }
 
+interface Career {
+  resource: string;
+  type: string;
+  season_id: number;
+  player_id: number;
+  bowling: null; // Assuming bowling is always null in the provided data
+  batting: BattingStats | null; // Batting can be null
+  updated_at: string;
+}
+
 interface BattingStats {
   matches: number;
   innings: number;
@@ -45,30 +55,7 @@ interface BattingStats {
   fifties: number;
 }
 
-interface Career {
-  resource: string;
-  type: string;
-  season_id: number;
-  player_id: number;
-  bowling: null; // Assuming bowling is always null in the provided data
-  batting: BattingStats | null; // Batting can be null
-  updated_at: string;
-}
-
-interface PlayerCareer {
-  resource: string;
-  id: number;
-  country_id: number;
-  firstname: string;
-  lastname: string;
-  fullname: string;
-  image_path: string;
-  dateofbirth: string;
-  gender: string;
-  battingstyle: string;
-  bowlingstyle: string;
-  position: PlayerPosition;
-  updated_at: string;
+interface PlayerCareer extends Player {
   career: Career[];
 }
 
@@ -76,7 +63,7 @@ export type {
   Country,
   Player,
   PlayerPosition,
-  BattingStats,
   Career,
+  BattingStats,
   PlayerCareer,
 };

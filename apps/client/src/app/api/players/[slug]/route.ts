@@ -1,4 +1,4 @@
-import type { Player, PlayerPosition } from "@repo/types";
+import type { Career, Player, PlayerCareer } from "@repo/types";
 import { type NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 
@@ -15,19 +15,20 @@ export async function GET(
   }
 
   try {
-    const playerResponse = await axios.get(
-      `${BASE_URL}/api/players/${playerId}`
-    );
-    let player = playerResponse.data as Player;
+    const [playerResponse, playerCareerResponse] = await Promise.all([
+      axios.get(`${BASE_URL}/api/players/${playerId}`),
+      axios.get(`${BASE_URL}/api/players/${playerId}/career`),
+    ]);
 
-    const positionResponse = await axios.get(
-      `${BASE_URL}/players/${playerId}/position`
-    );
-    const position = positionResponse.data as PlayerPosition;
+    const player = playerResponse.data as Player;
+    const careers = playerCareerResponse.data as Career[];
 
-    player = { ...player, position };
+    const aggrResponse: PlayerCareer = {
+      ...player,
+      career: careers,
+    };
 
-    return NextResponse.json({ player });
+    return NextResponse.json({ player: aggrResponse });
   } catch (error) {
     return NextResponse.json({ error: "Error fetching player data" });
   }
