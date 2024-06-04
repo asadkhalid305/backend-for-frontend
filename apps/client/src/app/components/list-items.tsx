@@ -19,6 +19,7 @@ export default function ListItems<T extends ItemType>({
     content = items.map((item) => (
       <li key={item.id}>
         <button
+          className="text-left w-full p-2 rounded-md transition-colors duration-200 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
           onClick={() => {
             handleClick(item);
           }}
@@ -29,7 +30,11 @@ export default function ListItems<T extends ItemType>({
       </li>
     ));
   } else {
-    content = <li>{selectedItem?.id ? "No item found" : "Select an item"}</li>;
+    content = (
+      <li className="text-center">
+        {selectedItem?.id ? "No item found" : "Select an item"}
+      </li>
+    );
   }
 
   return <ul>{content}</ul>;

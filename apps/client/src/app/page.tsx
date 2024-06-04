@@ -5,9 +5,9 @@ import { useState } from "react";
 import useCountries from "../hooks/use-countries";
 import usePlayers from "../hooks/use-players";
 import ListPlayerStats from "./components/list-player-stats";
-import LoadingSkeleton from "./components/loading-skeleton";
 import ItemsWrapper from "./components/items-wrapper";
 import Header from "./components/header";
+import ListItems from "./components/list-items";
 
 export default function PlayerApp(): JSX.Element {
   const { countries, loadingCountries } = useCountries();
@@ -24,34 +24,29 @@ export default function PlayerApp(): JSX.Element {
   return (
     <main className="px-4 max-w-screen-xl h-screen mx-auto overflow-hidden">
       <Header />
-      <section className="h-[calc(100%-160px)] flex">
-        <div className="w-1/4">
-          <ItemsWrapper<Country>
-            heading="Countries"
-            items={countries}
-            loading={loadingCountries}
-            selectedItem={selectedCountry}
-            setSelectedItem={setSelectedCountry}
-          />
+      <section className="h-[calc(100%-212px)] pb-16 flex">
+        <div className="w-1/4 border-2">
+          <ItemsWrapper heading="Countries" loading={loadingCountries}>
+            <ListItems<Country>
+              handleClick={setSelectedCountry}
+              items={countries}
+              selectedItem={selectedCountry}
+            />
+          </ItemsWrapper>
         </div>
-        <div className="w-1/4">
-          <ItemsWrapper<Player>
-            heading="Players"
-            items={players}
-            loading={loadingPlayers}
-            selectedItem={selectedCountry}
-            setSelectedItem={setSelectedPlayer}
-          />
+        <div className="w-1/4 border-2">
+          <ItemsWrapper heading="Players" loading={loadingPlayers}>
+            <ListItems<Player>
+              handleClick={setSelectedPlayer}
+              items={players}
+              selectedItem={selectedCountry}
+            />
+          </ItemsWrapper>
         </div>
-        <div className="w-2/4">
-          <h2 className="text-xl font-bold text-center">Statistics</h2>
-          <div className="h-[calc(100%-28px)] overflow-auto">
-            {loadingPlayerStats ? (
-              <LoadingSkeleton />
-            ) : (
-              <ListPlayerStats playerStats={playerStats} />
-            )}
-          </div>
+        <div className="w-2/4 border-2">
+          <ItemsWrapper heading="Statistics" loading={loadingPlayerStats}>
+            <ListPlayerStats playerStats={playerStats} />
+          </ItemsWrapper>
         </div>
       </section>
     </main>

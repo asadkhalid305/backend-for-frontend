@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key -- it's a dump component hence index can be a key */
 export default function LoadingSkeleton(): JSX.Element {
   return (
     <div
@@ -6,12 +7,12 @@ export default function LoadingSkeleton(): JSX.Element {
     >
       {Array.from({ length: 10 }).map((_, index) => (
         <div
-          key={index}
           className={`flex items-center justify-between ${index !== 0 ? "pt-4" : ""}`}
+          key={index}
         >
           <div>
-            <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
-            <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
+            <div className="h-2.5 bg-gray-200 rounded-full w-24 mb-2.5" />
+            <div className="w-32 h-2 bg-gray-100 rounded-full" />
           </div>
         </div>
       ))}

@@ -1,38 +1,23 @@
-import type { Country, Player, PlayerCareer } from "@repo/types";
-import type { Dispatch, SetStateAction } from "react";
 import LoadingSkeleton from "./loading-skeleton";
-import ListItems from "./list-items";
 
-type ItemType = Player | Country | PlayerCareer;
-
-interface ItemsWrapperProps<T extends ItemType> {
+interface ItemsWrapperProps {
   heading: string;
-  items: T[];
   loading: boolean;
-  selectedItem: ItemType;
-  setSelectedItem: Dispatch<SetStateAction<T>>;
+  children: JSX.Element;
 }
 
-export default function ItemsWrapper<T extends ItemType>({
+export default function ItemsWrapper({
   heading,
   loading,
-  items,
-  selectedItem,
-  setSelectedItem,
-}: ItemsWrapperProps<T>): JSX.Element {
+  children,
+}: ItemsWrapperProps): JSX.Element {
   return (
     <>
-      <h2 className="text-xl font-bold text-center capitalize">{heading}</h2>
-      <div className="h-[calc(100%-28px)] overflow-auto mt-6 px-4 scroll-smooth">
-        {loading ? (
-          <LoadingSkeleton />
-        ) : (
-          <ListItems
-            handleClick={setSelectedItem}
-            items={items}
-            selectedItem={selectedItem}
-          />
-        )}
+      <h2 className="text-xl font-bold text-center capitalize py-4 bg-gray-100">
+        {heading}
+      </h2>
+      <div className="h-[calc(100%-60px)] py-2 overflow-auto scroll-smooth">
+        {loading ? <LoadingSkeleton /> : children}
       </div>
     </>
   );

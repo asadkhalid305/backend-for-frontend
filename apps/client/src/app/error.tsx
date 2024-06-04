@@ -15,10 +15,10 @@ export default function Error({ error }: ErrorProps): JSX.Element {
 
   return (
     <div className="h-screen">
-      <section className="bg-white h-full flex">
+      <section className="h-full flex">
         <div className="py-8 px-4 mx-auto max-w-screen-xl content-center lg:py-16 lg:px-6">
           <div className="mx-auto max-w-screen-sm text-center">
-            <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-primary-600">
+            <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl">
               Oh no!
             </h1>
             <p className="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl">
@@ -29,7 +29,7 @@ export default function Error({ error }: ErrorProps): JSX.Element {
               lots to explore on the home page.
             </p>
             <a
-              className="inline-flex hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-md px-5 py-2.5 text-center my-4 transition-all duration-200 ease-in-out"
+              className="inline-flex hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-md px-5 py-2.5 text-center my-4 transition-all duration-200 ease-in-out"
               href="/"
             >
               Back to Homepage
