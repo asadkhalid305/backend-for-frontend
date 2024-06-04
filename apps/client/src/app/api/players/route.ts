@@ -28,7 +28,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     );
 
     const players = response.data as Player[];
-    return NextResponse.json({ players });
+    // extract only the fields needed by the client
+    const updatedPlayers = players.map(({ id, fullname }) => ({
+      id,
+      fullname,
+    }));
+    return NextResponse.json({ players: updatedPlayers });
   } catch (error) {
     return NextResponse.json({ error: "Error fetching players" });
   }

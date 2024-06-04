@@ -2,6 +2,11 @@
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ["cdn.sportmonks.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.sportmonks.com",
+      },
+    ],
   },
 };

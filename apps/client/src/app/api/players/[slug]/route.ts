@@ -1,4 +1,9 @@
-import type { Career, Player, PlayerCareer } from "@repo/types";
+import type {
+  Career,
+  Player,
+  PlayerCareer,
+  TransformedPlayerCareer,
+} from "@repo/types";
 import { type NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 
@@ -21,14 +26,31 @@ export async function GET(
     ]);
 
     const player = playerResponse.data as Player;
-    const careers = playerCareerResponse.data as Career[];
+    const career = playerCareerResponse.data as Career[];
 
-    const aggrResponse: PlayerCareer = {
+    const aggregatedResponse: PlayerCareer = {
       ...player,
-      career: careers,
+      career,
     };
 
-    return NextResponse.json({ player: aggrResponse });
+    const transformedResponse: TransformedPlayerCareer = {
+      id: aggregatedResponse.id,
+      fullname: aggregatedResponse.fullname,
+      image_path: aggregatedResponse.image_path,
+      dateofbirth: aggregatedResponse.dateofbirth,
+      gender: aggregatedResponse.gender,
+      battingstyle: aggregatedResponse.battingstyle,
+      bowlingstyle: aggregatedResponse.bowlingstyle,
+      position: aggregatedResponse.position.name,
+      career: aggregatedResponse.career.map((careerItem) => ({
+        player_id: careerItem.player_id,
+        type: careerItem.type,
+        bowling: careerItem.bowling,
+        batting: careerItem.batting,
+      })),
+    };
+
+    return NextResponse.json({ player: transformedResponse });
   } catch (error) {
     return NextResponse.json({ error: "Error fetching player data" });
   }

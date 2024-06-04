@@ -6,13 +6,18 @@ type ItemType = Country | Player;
 interface ListItemsProps<T extends ItemType> {
   handleClick: Dispatch<SetStateAction<T>>;
   items: T[];
-  selectedItem?: ItemType; // Add the missing 'selectedItem' property
+  selectedItem?: ItemType;
+  message: {
+    required?: string;
+    empty?: string;
+  };
 }
 
 export default function ListItems<T extends ItemType>({
   handleClick,
   items,
   selectedItem,
+  message,
 }: ListItemsProps<T>): JSX.Element {
   let content;
   if (items.length > 0) {
@@ -32,7 +37,7 @@ export default function ListItems<T extends ItemType>({
   } else {
     content = (
       <li className="text-center">
-        {selectedItem?.id ? "No item found" : "Select an item"}
+        {selectedItem?.id ? message.empty : message.required}
       </li>
     );
   }

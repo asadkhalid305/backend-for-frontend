@@ -1,4 +1,45 @@
-interface Country {
+interface PlayerPosition {
+  resource: string;
+  id: number;
+  name: string;
+}
+
+interface CommonStatistics {
+  matches: number;
+  innings: number;
+  strike_rate: number;
+}
+
+interface BowlingStatistics extends CommonStatistics {
+  overs: number;
+  average: number;
+  econ_rate: number;
+  medians: number;
+  runs: number;
+  wickets: number;
+  wide: number;
+  noball: number;
+  four_wickets: number;
+  five_wickets: number;
+  ten_wickets: number;
+  rate: number;
+}
+
+interface BattingStatistics extends CommonStatistics {
+  runs_scored: number;
+  not_outs: number;
+  highest_inning_score: number;
+  balls_faced: number;
+  average: number;
+  four_x: number;
+  six_x: number;
+  fow_score: number;
+  fow_balls: number;
+  hundreds: number;
+  fifties: number;
+}
+
+export interface Country {
   resource: string;
   id: number;
   continent_id: number;
@@ -6,7 +47,7 @@ interface Country {
   updated_at: null | string; // Use 'string' if the date is represented as a string, or 'Date' if it's a Date object
 }
 
-interface Player {
+export interface Player {
   resource: string;
   id: number;
   country_id: number;
@@ -22,48 +63,56 @@ interface Player {
   updated_at: string;
 }
 
-interface PlayerPosition {
-  resource: string;
-  id: number;
-  name: string;
-}
-
-interface Career {
+export interface Career {
   resource: string;
   type: string;
   season_id: number;
   player_id: number;
-  bowling: null; // Assuming bowling is always null in the provided data
-  batting: BattingStats | null; // Batting can be null
+  bowling: BowlingStatistics | null;
+  batting: BattingStatistics | null; // Batting can be null
   updated_at: string;
 }
 
-interface BattingStats {
-  matches: number;
-  innings: number;
-  runs_scored: number;
-  not_outs: number;
-  highest_inning_score: number;
-  strike_rate: number;
-  balls_faced: number;
-  average: number;
-  four_x: number;
-  six_x: number;
-  fow_score: number;
-  fow_balls: number;
-  hundreds: number;
-  fifties: number;
-}
-
-interface PlayerCareer extends Player {
+export interface PlayerCareer extends Player {
   career: Career[];
 }
 
-export type {
-  Country,
+export type TransformedPlayer = Pick<
   Player,
-  PlayerPosition,
+  | "id"
+  | "fullname"
+  | "image_path"
+  | "dateofbirth"
+  | "gender"
+  | "battingstyle"
+  | "bowlingstyle"
+>;
+
+export type TransformedCareer = Pick<
   Career,
-  BattingStats,
-  PlayerCareer,
-};
+  "player_id" | "type" | "bowling" | "batting"
+>;
+
+export interface TransformedPlayerCareer extends TransformedPlayer {
+  position: string;
+  career: TransformedCareer[];
+}
+
+// export interface TransformedPlayerCareer {
+//   id: number;
+//   fullname: string;
+//   image_path: string;
+//   dateofbirth: string;
+//   gender: string;
+//   battingstyle: string;
+//   bowlingstyle: string;
+//   position: string;
+//   career: [
+//     {
+//       player_id: number;
+//       type: string;
+//       bowling: BowlingStatistics | null;
+//       batting: BattingStatistics | null;
+//     },
+//   ];
+// }

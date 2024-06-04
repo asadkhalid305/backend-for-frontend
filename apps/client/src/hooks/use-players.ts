@@ -1,5 +1,5 @@
 import { logClient } from "@repo/logger";
-import type { Country, Player, PlayerCareer } from "@repo/types";
+import type { Country, Player, TransformedPlayerCareer } from "@repo/types";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -7,8 +7,8 @@ interface PlayersData {
   players: Player[];
 }
 
-interface PlayerStatsData {
-  player: PlayerCareer;
+interface PlayerStatisticsData {
+  player: TransformedPlayerCareer;
 }
 
 interface UsePlayerProps {
@@ -21,16 +21,15 @@ export default function usePlayers({
   selectedPlayer,
 }: UsePlayerProps): {
   players: Player[];
-  playerStats: PlayerCareer;
+  playerStatistics: TransformedPlayerCareer;
   loadingPlayers: boolean;
-  loadingPlayerStats: boolean;
+  loadingPlayerStatistics: boolean;
 } {
   const [players, setPlayers] = useState<Player[]>([]);
-  const [playerStats, setPlayerStats] = useState<PlayerCareer>(
-    {} as PlayerCareer
-  );
+  const [playerStatistics, setPlayerStatistics] =
+    useState<TransformedPlayerCareer>({} as TransformedPlayerCareer);
   const [loadingPlayers, setLoadingPlayers] = useState(false);
-  const [loadingPlayerStats, setLoadingPlayerStats] = useState(false);
+  const [loadingPlayerStatistics, setLoadingPlayerStatistics] = useState(false);
 
   useEffect(() => {
     async function getPlayers(): Promise<PlayersData> {
@@ -50,7 +49,7 @@ export default function usePlayers({
     setLoadingPlayers(true);
     // reset player's data when country changes
     setPlayers([]);
-    setPlayerStats({} as PlayerCareer);
+    setPlayerStatistics({} as TransformedPlayerCareer);
     getPlayers()
       .then((data) => {
         setPlayers(
@@ -66,28 +65,29 @@ export default function usePlayers({
   }, [selectedCountry.id]);
 
   useEffect(() => {
-    async function getPlayerStats(): Promise<PlayerStatsData> {
+    async function getPlayerStatistics(): Promise<PlayerStatisticsData> {
       const response = await axios.get(`/api/players/${selectedPlayer.id}`);
-      const data = response.data as PlayerStatsData;
+      const data = response.data as PlayerStatisticsData;
       return data;
     }
 
     if (!selectedPlayer.id) {
       return;
     }
-
-    setLoadingPlayerStats(true);
-    getPlayerStats()
+    setLoadingPlayerStatistics(true);
+    // reset player's statistics when player changes
+    setPlayerStatistics({} as TransformedPlayerCareer);
+    getPlayerStatistics()
       .then((data) => {
-        setPlayerStats(data.player);
+        setPlayerStatistics(data.player);
       })
       .catch((error) => {
         logClient(error);
       })
       .finally(() => {
-        setLoadingPlayerStats(false);
+        setLoadingPlayerStatistics(false);
       });
   }, [selectedPlayer.id]);
 
-  return { players, playerStats, loadingPlayers, loadingPlayerStats };
+  return { players, playerStatistics, loadingPlayers, loadingPlayerStatistics };
 }
