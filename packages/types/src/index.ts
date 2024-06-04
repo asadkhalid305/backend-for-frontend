@@ -39,6 +39,16 @@ interface BattingStatistics extends CommonStatistics {
   fifties: number;
 }
 
+type TransformedBowlingStatistics = Omit<
+  BowlingStatistics,
+  "medians" | "five_wickets" | "ten_wickets"
+>;
+
+type TransformedBattingStatistics = Omit<
+  BattingStatistics,
+  "fow_score" | "fow_balls"
+>;
+
 export interface Country {
   resource: string;
   id: number;
@@ -79,40 +89,16 @@ export interface PlayerCareer extends Player {
 
 export type TransformedPlayer = Pick<
   Player,
-  | "id"
-  | "fullname"
-  | "image_path"
-  | "dateofbirth"
-  | "gender"
-  | "battingstyle"
-  | "bowlingstyle"
+  "id" | "fullname" | "image_path" | "gender" | "battingstyle" | "bowlingstyle"
 >;
 
-export type TransformedCareer = Pick<
-  Career,
-  "player_id" | "type" | "bowling" | "batting"
->;
+export type TransformedCareer = Pick<Career, "player_id" | "type"> & {
+  bowling: TransformedBowlingStatistics | null;
+  batting: TransformedBattingStatistics | null;
+};
 
 export interface TransformedPlayerCareer extends TransformedPlayer {
+  age: number;
   position: string;
   career: TransformedCareer[];
 }
-
-// export interface TransformedPlayerCareer {
-//   id: number;
-//   fullname: string;
-//   image_path: string;
-//   dateofbirth: string;
-//   gender: string;
-//   battingstyle: string;
-//   bowlingstyle: string;
-//   position: string;
-//   career: [
-//     {
-//       player_id: number;
-//       type: string;
-//       bowling: BowlingStatistics | null;
-//       batting: BattingStatistics | null;
-//     },
-//   ];
-// }
