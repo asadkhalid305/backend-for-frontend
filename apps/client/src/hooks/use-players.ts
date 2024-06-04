@@ -1,7 +1,8 @@
 import { logClient } from "@repo/logger";
 import type { Country, Player, TransformedPlayerCareer } from "@repo/types";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
+import axios from "axios";
 
 interface PlayersData {
   players: Player[];
@@ -12,24 +13,31 @@ interface PlayerStatisticsData {
 }
 
 interface UsePlayerProps {
+  filteredCountries: Country[];
   selectedCountry: Country;
   selectedPlayer: Player;
 }
 
 export default function usePlayers({
+  filteredCountries,
   selectedCountry,
   selectedPlayer,
 }: UsePlayerProps): {
   players: Player[];
+  filteredPlayers: Player[];
   playerStatistics: TransformedPlayerCareer;
   loadingPlayers: boolean;
   loadingPlayerStatistics: boolean;
+  setSearchPlayer: Dispatch<SetStateAction<string>>;
+  playersMessage: string;
+  playerStatisticsMessage: string;
 } {
   const [players, setPlayers] = useState<Player[]>([]);
   const [playerStatistics, setPlayerStatistics] =
     useState<TransformedPlayerCareer>({} as TransformedPlayerCareer);
   const [loadingPlayers, setLoadingPlayers] = useState(false);
   const [loadingPlayerStatistics, setLoadingPlayerStatistics] = useState(false);
+  const [searchPlayer, setSearchPlayer] = useState<string>("");
 
   useEffect(() => {
     async function getPlayers(): Promise<PlayersData> {
@@ -48,6 +56,7 @@ export default function usePlayers({
 
     setLoadingPlayers(true);
     // reset player's data when country changes
+    setSearchPlayer("");
     setPlayers([]);
     setPlayerStatistics({} as TransformedPlayerCareer);
     getPlayers()
@@ -76,6 +85,7 @@ export default function usePlayers({
     }
     setLoadingPlayerStatistics(true);
     // reset player's statistics when player changes
+    setSearchPlayer("");
     setPlayerStatistics({} as TransformedPlayerCareer);
     getPlayerStatistics()
       .then((data) => {
@@ -89,5 +99,35 @@ export default function usePlayers({
       });
   }, [selectedPlayer.id]);
 
-  return { players, playerStatistics, loadingPlayers, loadingPlayerStatistics };
+  const filteredPlayers = players.filter((player) =>
+    player.fullname.toLowerCase().includes(searchPlayer.toLowerCase())
+  );
+
+  let playersMessage = "";
+
+  if (filteredCountries.length > 0 && !selectedCountry.id) {
+    playersMessage = "Select a country";
+  } else if (filteredPlayers.length === 0) {
+    playersMessage = "No players found";
+  }
+
+  let playerStatisticsMessage = "";
+  if (filteredCountries.length === 0 || filteredPlayers.length === 0) {
+    playerStatisticsMessage = "No statistics available";
+  } else if (filteredPlayers.length > 0 && !selectedPlayer.id) {
+    playerStatisticsMessage = "Select a player";
+  } else {
+    playerStatisticsMessage = "No statistics found";
+  }
+
+  return {
+    players,
+    filteredPlayers,
+    loadingPlayers,
+    playerStatistics,
+    loadingPlayerStatistics,
+    setSearchPlayer,
+    playersMessage,
+    playerStatisticsMessage,
+  };
 }

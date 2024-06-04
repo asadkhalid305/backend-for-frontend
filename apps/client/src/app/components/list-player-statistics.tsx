@@ -1,18 +1,14 @@
-import type {
-  Player,
-  TransformedCareer,
-  TransformedPlayerCareer,
-} from "@repo/types";
+import type { TransformedCareer, TransformedPlayerCareer } from "@repo/types";
 import Image from "next/image";
 
 interface ListPlayerStatisticsProps {
   playerStatistics: TransformedPlayerCareer;
-  selectedPlayer: Player;
+  message: string;
 }
 
 export default function ListPlayerStatistics({
   playerStatistics,
-  selectedPlayer,
+  message,
 }: ListPlayerStatisticsProps): JSX.Element {
   return playerStatistics.id ? (
     <div className="w-full p-2 flex flex-col items-center">
@@ -65,7 +61,7 @@ export default function ListPlayerStatistics({
       <div className="w-full mt-10 text-center">
         <h3 className="text-xl font-bold mb-4">Leagues</h3>
         {playerStatistics.career.map((career: TransformedCareer) => (
-          <div className="border-b border-gray-200" key={career.player_id}>
+          <div className="border-gray-200" key={career.player_id}>
             <div className="py-4 bg-gray-400 text-lg font-semibold">
               {career.type}
             </div>
@@ -238,8 +234,6 @@ export default function ListPlayerStatistics({
       </div>
     </div>
   ) : (
-    <div className="text-center">
-      {selectedPlayer.id ? "Player statistics not found" : "Select a player"}
-    </div>
+    <div className="text-center text-lg text-semibold">{message}</div>
   );
 }

@@ -6,17 +6,12 @@ type ItemType = Country | Player;
 interface ListItemsProps<T extends ItemType> {
   handleClick: Dispatch<SetStateAction<T>>;
   items: T[];
-  selectedItem?: ItemType;
-  message: {
-    required?: string;
-    empty?: string;
-  };
+  message: string;
 }
 
 export default function ListItems<T extends ItemType>({
   handleClick,
   items,
-  selectedItem,
   message,
 }: ListItemsProps<T>): JSX.Element {
   let content;
@@ -34,12 +29,8 @@ export default function ListItems<T extends ItemType>({
         </button>
       </li>
     ));
-  } else {
-    content = (
-      <li className="text-center">
-        {selectedItem?.id ? message.empty : message.required}
-      </li>
-    );
+  } else if (message) {
+    content = <li className="text-center text-lg text-semibold">{message}</li>;
   }
 
   return <ul>{content}</ul>;

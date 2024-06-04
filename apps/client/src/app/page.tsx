@@ -5,58 +5,74 @@ import { useState } from "react";
 import useCountries from "../hooks/use-countries";
 import usePlayers from "../hooks/use-players";
 import ListPlayerStatistics from "./components/list-player-statistics";
-import ItemsWrapper from "./components/items-wrapper";
+import ListWrapper from "./components/list-wrapper";
 import Header from "./components/header";
 import ListItems from "./components/list-items";
 
 export default function PlayerApp(): JSX.Element {
-  const { countries, loadingCountries } = useCountries();
   const [selectedCountry, setSelectedCountry] = useState<Country>(
     {} as Country
   );
   const [selectedPlayer, setSelectedPlayer] = useState<Player>({} as Player);
-  const { players, playerStatistics, loadingPlayers, loadingPlayerStatistics } =
-    usePlayers({
-      selectedCountry,
-      selectedPlayer,
-    });
+  const {
+    filteredCountries,
+    loadingCountries,
+    setSearchCountry,
+    countriesMessage,
+  } = useCountries();
+  const {
+    filteredPlayers,
+    loadingPlayers,
+    playerStatistics,
+    loadingPlayerStatistics,
+    setSearchPlayer,
+    playersMessage,
+    playerStatisticsMessage,
+  } = usePlayers({
+    filteredCountries,
+    selectedCountry,
+    selectedPlayer,
+  });
 
   return (
     <main className="px-4 max-w-screen-xl h-screen mx-auto overflow-hidden">
       <Header />
       <section className="h-[calc(100%-212px)] pb-16 flex">
         <div className="w-1/4 border-2">
-          <ItemsWrapper heading="Countries" loading={loadingCountries}>
+          <ListWrapper
+            heading="Countries"
+            loading={loadingCountries}
+            resource="Country"
+            setSearchValue={setSearchCountry}
+          >
             <ListItems<Country>
               handleClick={setSelectedCountry}
-              items={countries}
-              message={{
-                empty: "No countries found",
-              }}
-              selectedItem={selectedCountry}
+              items={filteredCountries}
+              message={countriesMessage}
             />
-          </ItemsWrapper>
+          </ListWrapper>
         </div>
         <div className="w-1/4 border-2">
-          <ItemsWrapper heading="Players" loading={loadingPlayers}>
+          <ListWrapper
+            heading="Players"
+            loading={loadingPlayers}
+            resource="Player"
+            setSearchValue={setSearchPlayer}
+          >
             <ListItems<Player>
               handleClick={setSelectedPlayer}
-              items={players}
-              message={{
-                required: "Select a country",
-                empty: "No players found",
-              }}
-              selectedItem={selectedCountry}
+              items={filteredPlayers}
+              message={playersMessage}
             />
-          </ItemsWrapper>
+          </ListWrapper>
         </div>
         <div className="w-2/4 border-2">
-          <ItemsWrapper heading="Statistics" loading={loadingPlayerStatistics}>
+          <ListWrapper heading="Statistics" loading={loadingPlayerStatistics}>
             <ListPlayerStatistics
+              message={playerStatisticsMessage}
               playerStatistics={playerStatistics}
-              selectedPlayer={selectedPlayer}
             />
-          </ItemsWrapper>
+          </ListWrapper>
         </div>
       </section>
     </main>

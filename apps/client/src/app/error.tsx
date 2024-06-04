@@ -29,7 +29,7 @@ export default function Error({ error }: ErrorProps): JSX.Element {
               lots to explore on the home page.
             </p>
             <a
-              className="inline-flex hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-md px-5 py-2.5 text-center my-4 transition-all duration-200 ease-in-out"
+              className="inline-flex hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-md px-5 py-2.5 text-center my-4 transition-all duration-200 ease-in-out"
               href="/"
             >
               Back to Homepage

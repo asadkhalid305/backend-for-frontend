@@ -1,7 +1,8 @@
 import { logClient } from "@repo/logger";
 import type { Country } from "@repo/types";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
+import axios from "axios";
 
 interface CountriesData {
   countries: Country[]; // or string[] if countries are represented as strings
@@ -10,9 +11,13 @@ interface CountriesData {
 export default function useCountries(): {
   countries: Country[];
   loadingCountries: boolean;
+  filteredCountries: Country[];
+  setSearchCountry: Dispatch<SetStateAction<string>>;
+  countriesMessage: string;
 } {
   const [countries, setCountries] = useState<Country[]>([]);
   const [loadingCountries, setLoadingCountries] = useState(true);
+  const [searchCountry, setSearchCountry] = useState<string>("");
 
   useEffect(() => {
     async function getCountries(): Promise<CountriesData> {
@@ -35,5 +40,18 @@ export default function useCountries(): {
       });
   }, []);
 
-  return { countries, loadingCountries };
+  const filteredCountries = countries.filter((country) =>
+    country.name.toLowerCase().includes(searchCountry.toLowerCase())
+  );
+
+  const countriesMessage =
+    filteredCountries.length === 0 ? "No countries found" : "";
+
+  return {
+    countries,
+    filteredCountries,
+    loadingCountries,
+    setSearchCountry,
+    countriesMessage,
+  };
 }

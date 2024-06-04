@@ -7,7 +7,7 @@ import type {
 } from "@repo/types";
 import { type NextRequest, NextResponse } from "next/server";
 import axios from "axios";
-import lodashStartCase from "lodash/startCase";
+import startCase from "lodash/startCase";
 import { getAge } from "../../../utils/helpers";
 
 const BASE_URL = process.env.API_BASE_URL || "";
@@ -42,8 +42,8 @@ export async function GET(
       image_path: aggregatedResponse.image_path,
       age: getAge(aggregatedResponse.dateofbirth),
       gender: aggregatedResponse.gender === "m" ? "Male" : "Female",
-      battingstyle: lodashStartCase(aggregatedResponse.battingstyle),
-      bowlingstyle: lodashStartCase(aggregatedResponse.bowlingstyle),
+      battingstyle: startCase(aggregatedResponse.battingstyle),
+      bowlingstyle: startCase(aggregatedResponse.bowlingstyle),
       position: aggregatedResponse.position.name,
       career: aggregatedResponse.career.reduce(
         (acc: TransformedCareer[], careerItem: Career) => {
