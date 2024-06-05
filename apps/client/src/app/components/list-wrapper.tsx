@@ -29,7 +29,10 @@ export default function ListWrapper({
         />
       )}
       <div
-        className={`h-[calc(100%-${resource ? "102px" : "60px"})] py-2 overflow-auto scroll-smooth`}
+        className="py-2 overflow-auto scroll-smooth"
+        style={{
+          height: `calc(100% - ${resource ? "102px" : "60px"})`,
+        }}
       >
         {loading ? <LoadingSkeleton /> : children}
       </div>

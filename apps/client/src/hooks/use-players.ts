@@ -15,13 +15,13 @@ interface PlayerStatisticsData {
 interface UsePlayerProps {
   filteredCountries: Country[];
   selectedCountry: Country;
-  selectedPlayer: Player;
+  searchCountry: string;
 }
 
 export default function usePlayers({
   filteredCountries,
   selectedCountry,
-  selectedPlayer,
+  searchCountry,
 }: UsePlayerProps): {
   players: Player[];
   filteredPlayers: Player[];
@@ -31,6 +31,7 @@ export default function usePlayers({
   setSearchPlayer: Dispatch<SetStateAction<string>>;
   playersMessage: string;
   playerStatisticsMessage: string;
+  setSelectedPlayer: Dispatch<SetStateAction<Player>>;
 } {
   const [players, setPlayers] = useState<Player[]>([]);
   const [playerStatistics, setPlayerStatistics] =
@@ -38,6 +39,7 @@ export default function usePlayers({
   const [loadingPlayers, setLoadingPlayers] = useState(false);
   const [loadingPlayerStatistics, setLoadingPlayerStatistics] = useState(false);
   const [searchPlayer, setSearchPlayer] = useState<string>("");
+  const [selectedPlayer, setSelectedPlayer] = useState<Player>({} as Player);
 
   useEffect(() => {
     async function getPlayers(): Promise<PlayersData> {
@@ -56,7 +58,7 @@ export default function usePlayers({
 
     setLoadingPlayers(true);
     // reset player's data when country changes
-    setSearchPlayer("");
+    setSearchPlayer((_prevState) => "");
     setPlayers([]);
     setPlayerStatistics({} as TransformedPlayerCareer);
     getPlayers()
@@ -85,7 +87,7 @@ export default function usePlayers({
     }
     setLoadingPlayerStatistics(true);
     // reset player's statistics when player changes
-    setSearchPlayer("");
+    setSearchPlayer((_prevState) => "");
     setPlayerStatistics({} as TransformedPlayerCareer);
     getPlayerStatistics()
       .then((data) => {
@@ -98,6 +100,12 @@ export default function usePlayers({
         setLoadingPlayerStatistics(false);
       });
   }, [selectedPlayer.id]);
+
+  // @Note: Resetting searchPlayer is not working in usePlayers but works outside the hook for unknown reason.
+  // @Todo: This needs be debugged and fixed.
+  useEffect(() => {
+    setSearchPlayer((_prevState) => "");
+  }, [searchCountry]);
 
   const filteredPlayers = players.filter((player) =>
     player.fullname.toLowerCase().includes(searchPlayer.toLowerCase())
@@ -129,5 +137,6 @@ export default function usePlayers({
     setSearchPlayer,
     playersMessage,
     playerStatisticsMessage,
+    setSelectedPlayer,
   };
 }

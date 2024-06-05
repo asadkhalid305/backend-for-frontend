@@ -1,7 +1,6 @@
 "use client";
 
 import type { Country, Player } from "@repo/types";
-import { useState } from "react";
 import useCountries from "../hooks/use-countries";
 import usePlayers from "../hooks/use-players";
 import ListPlayerStatistics from "./components/list-player-statistics";
@@ -10,15 +9,14 @@ import Header from "./components/header";
 import ListItems from "./components/list-items";
 
 export default function PlayerApp(): JSX.Element {
-  const [selectedCountry, setSelectedCountry] = useState<Country>(
-    {} as Country
-  );
-  const [selectedPlayer, setSelectedPlayer] = useState<Player>({} as Player);
   const {
     filteredCountries,
     loadingCountries,
+    searchCountry,
     setSearchCountry,
     countriesMessage,
+    selectedCountry,
+    setSelectedCountry,
   } = useCountries();
   const {
     filteredPlayers,
@@ -28,10 +26,11 @@ export default function PlayerApp(): JSX.Element {
     setSearchPlayer,
     playersMessage,
     playerStatisticsMessage,
+    setSelectedPlayer,
   } = usePlayers({
     filteredCountries,
     selectedCountry,
-    selectedPlayer,
+    searchCountry,
   });
 
   return (

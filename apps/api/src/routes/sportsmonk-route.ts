@@ -83,7 +83,6 @@ router.get("/players/:id/career", async (req: Request, res: Response) => {
     });
     const playerCareer: PlayerCareer = response.data.data || {};
     // @Note: sending only career data for example purposes
-    // In BFF, we are ombining this response with Player data
     const careers: Career[] = playerCareer.career || [];
     res.status(200).json(careers);
   } catch (error) {

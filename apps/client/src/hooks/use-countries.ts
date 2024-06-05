@@ -5,19 +5,25 @@ import type { Dispatch, SetStateAction } from "react";
 import axios from "axios";
 
 interface CountriesData {
-  countries: Country[]; // or string[] if countries are represented as strings
+  countries: Country[];
 }
 
 export default function useCountries(): {
   countries: Country[];
   loadingCountries: boolean;
   filteredCountries: Country[];
+  searchCountry: string;
   setSearchCountry: Dispatch<SetStateAction<string>>;
   countriesMessage: string;
+  selectedCountry: Country;
+  setSelectedCountry: Dispatch<SetStateAction<Country>>;
 } {
   const [countries, setCountries] = useState<Country[]>([]);
   const [loadingCountries, setLoadingCountries] = useState(true);
   const [searchCountry, setSearchCountry] = useState<string>("");
+  const [selectedCountry, setSelectedCountry] = useState<Country>(
+    {} as Country
+  );
 
   useEffect(() => {
     async function getCountries(): Promise<CountriesData> {
@@ -51,7 +57,10 @@ export default function useCountries(): {
     countries,
     filteredCountries,
     loadingCountries,
+    searchCountry,
     setSearchCountry,
     countriesMessage,
+    selectedCountry,
+    setSelectedCountry,
   };
 }

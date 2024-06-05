@@ -68,16 +68,19 @@ export async function GET(
                 innings:
                   (acc[existingItemIndex].bowling?.innings || 0) +
                   (transformedCareerItem.bowling?.innings || 0),
-                strike_rate:
-                  (acc[existingItemIndex].bowling?.strike_rate || 0) +
-                  (transformedCareerItem.bowling?.strike_rate || 0),
+                strike_rate: Number(
+                  (
+                    (acc[existingItemIndex].bowling?.strike_rate || 0) +
+                    (transformedCareerItem.bowling?.strike_rate || 0)
+                  ).toFixed(2)
+                ),
                 overs:
                   (acc[existingItemIndex].bowling?.overs || 0) +
                   (transformedCareerItem.bowling?.overs || 0),
                 average:
                   (acc[existingItemIndex].bowling?.average || 0) +
                   (transformedCareerItem.bowling?.average || 0),
-                econ_rate: parseFloat(
+                econ_rate: Number(
                   (
                     (acc[existingItemIndex].bowling?.econ_rate || 0) +
                     (transformedCareerItem.bowling?.econ_rate || 0)
@@ -98,9 +101,14 @@ export async function GET(
                 four_wickets:
                   (acc[existingItemIndex].bowling?.four_wickets || 0) +
                   (transformedCareerItem.bowling?.four_wickets || 0),
-                rate:
-                  (acc[existingItemIndex].bowling?.rate || 0) +
-                  (transformedCareerItem.bowling?.rate || 0),
+                // @Note: the value of rate is not limiting to decimal 2 places despite using Number() and toFixed(2)
+                // @Todo: this needs to be fixed
+                rate: Number(
+                  (
+                    (acc[existingItemIndex].bowling?.rate || 0) +
+                    (transformedCareerItem.bowling?.rate || 0)
+                  ).toFixed(2)
+                ),
               },
               batting: {
                 matches:
@@ -109,9 +117,12 @@ export async function GET(
                 innings:
                   (acc[existingItemIndex].batting?.innings || 0) +
                   (transformedCareerItem.batting?.innings || 0),
-                strike_rate:
-                  (acc[existingItemIndex].batting?.strike_rate || 0) +
-                  (transformedCareerItem.batting?.strike_rate || 0),
+                strike_rate: Number(
+                  (
+                    (acc[existingItemIndex].batting?.strike_rate || 0) +
+                    (transformedCareerItem.batting?.strike_rate || 0)
+                  ).toFixed(2)
+                ),
                 runs_scored:
                   (acc[existingItemIndex].batting?.runs_scored || 0) +
                   (transformedCareerItem.batting?.runs_scored || 0),
