@@ -23,11 +23,13 @@ module.exports = {
   globals: {
     JSX: true,
   },
-  plugins: ["only-warn"],
   settings: {
     "import/resolver": {
       typescript: {
         project,
+      },
+      node: {
+        extensions: [".mjs", ".js", ".jsx", ".ts", ".tsx"],
       },
     },
   },
@@ -36,4 +38,12 @@ module.exports = {
   rules: {
     "import/no-default-export": "off",
   },
+  overrides: [
+    {
+      files: ["*.config.js"],
+      env: {
+        node: true,
+      },
+    },
+  ],
 };

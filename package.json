@@ -1,20 +1,28 @@
 {
   "private": true,
   "scripts": {
-    "build": "turbo run build",
-    "clean": "turbo run clean",
-    "dev": "turbo run dev",
+    "build": "turbo build",
+    "dev": "dotenv -- turbo run dev",
+    "dev:api": "dotenv -- turbo dev --filter api",
+    "dev:client": "dotenv -- turbo dev --filter client",
+    "test": "turbo test",
+    "type-check": "turbo type-check",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "lint": "turbo run lint",
-    "test": "turbo run test",
-    "typecheck": "turbo run typecheck"
+    "lint": "turbo lint",
+    "clean": "turbo clean"
   },
   "devDependencies": {
+    "eslint": "^8.57.0",
     "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "@repo/typescript-config": "workspace:*",
     "turbo": "latest"
   },
   "packageManager": "pnpm@9.0.1",
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv-cli": "^7.4.2"
   }
 }
